@@ -43,14 +43,18 @@ public class VideoGameRepository : IVideoGameRepository
         await connection.ExecuteAsync("Insert Into VideoGames (Title, Publisher, Developer, Platform, ReleaseDate) Values (@Title, @Publisher, @Developer, @Platform, @ReleaseDate)", videoGame);
     }
 
-    public Task DeleteAsync(int id)
+    public async Task UpdateAsync(VideoGame videoGame)
     {
-        throw new NotImplementedException();
+        using var connection = GetConnection();
+        connection.Open();
+        await connection.ExecuteAsync("Update VideoGames Set Title = @Title , Publisher = @Publisher, Developer = @Developer, Platform = @Platform, ReleaseDate = @ReleaseDate Where Id = @Id", videoGame);
     }
 
-    public Task UpdateAsync(VideoGame videoGame)
+    public async Task DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        using var connection = GetConnection();
+        connection.Open();
+        await connection.ExecuteAsync("Delete  From VideoGames Where Id = @id", new { Id = id });
     }
 
     private SqlConnection GetConnection()

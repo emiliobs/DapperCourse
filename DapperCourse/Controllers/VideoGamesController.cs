@@ -38,4 +38,32 @@ public class VideoGamesController : ControllerBase
         await _videoGameRepository.AddAsync(videoGame);
         return Ok();
     }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> UpdateAsync(int id, VideoGame videoGame)
+    {
+        var exist = await _videoGameRepository.GetByIdAsync(id);
+        if (exist is null)
+        {
+            return NotFound("The game does not exist in the DB.!");
+        }
+
+        videoGame.Id = id;
+
+        await _videoGameRepository.UpdateAsync(videoGame);
+        return Ok();
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteAsyn(int id)
+    {
+        var exist = await _videoGameRepository.GetByIdAsync(id);
+        if (exist is null)
+        {
+            return NotFound("Sorry!. Video Game does not exist in the DB!");
+        }
+
+        await _videoGameRepository.DeleteAsync(id);
+        return Ok();
+    }
 }
